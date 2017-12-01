@@ -20,7 +20,7 @@ fn main() {
         root.set_default_foreground(colors::WHITE);
         root.put_char(player_x, player_y, 'P', BackgroundFlag::None);
         root.flush();
-        root.wait_for_keypress(true);
+        handle_input(&mut root, &mut player_x, &mut player_y);
     }
 }
 
@@ -31,4 +31,20 @@ fn root() -> Root {
         .size(SCREEN_WIDTH, SCREEN_HEIGHT)
         .title("Rogue - Naomijubs")
         .init()
+}
+
+fn handle_input(root: &mut Root, player_x: &mut i32, player_y: &mut i32) {
+    use tcod::input::Key;
+    use tcod::input::KeyCode::*;
+
+    let key = root.wait_for_keypress(true);
+    match key {
+        // movement keys
+        Key { code: Up, .. } => { *player_y -= 1; root.clear();},
+        Key { code: Down, .. } => { *player_y += 1; root.clear();},
+        Key { code: Left, .. } => { *player_x -= 1; root.clear();},
+        Key { code: Right, .. } => { *player_x += 1; root.clear();},
+
+        _ => {},
+    }
 }
