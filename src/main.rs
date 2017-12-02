@@ -1,10 +1,12 @@
 extern crate tcod;
 
 mod gameelements;
+mod map;
 
 use tcod::console::*;
 use tcod::colors;
 use gameelements::GameElement;
+use map::{make_map, draw};
 
 const SCREEN_WIDTH: i32 = 80;
 const SCREEN_HEIGHT: i32 = 60;
@@ -14,13 +16,16 @@ fn main() {
     tcod::system::set_fps(LIMIT_FPS);
 
     let mut root = root();
+    let map = make_map();
     let mut offscreen = Offscreen::new(SCREEN_WIDTH, SCREEN_HEIGHT / 3);
-    let mut player = GameElement::new(10, 14, 'P', colors::WHITE);
+    let mut elements = vec![GameElement::new(10, 14, 'P', colors::WHITE),
+                        GameElement::new(69, 16, '@', colors::YELLOW)];
 
     while !root.window_closed() {
         root.set_default_foreground(colors::RED);
         root.horizontal_line(10, 15, 60, BackgroundFlag::None);
-        player.draw(&mut root);
+        for e in &elements { e.draw(&mut root)};
+        draw(&map, &mut root);
 
         offscreen.set_default_foreground(colors::BLUE);
         offscreen.put_char(10, 2, 'H', BackgroundFlag::None);
@@ -29,7 +34,7 @@ fn main() {
 
         blit(&mut offscreen, (0, 0), (SCREEN_WIDTH, SCREEN_HEIGHT / 3), &mut root, (0, 50), 1.0, 0.6);
         root.flush();
-        let state = handle_move(&mut root, &mut player);
+        let state = handle_move(&mut root, &mut elements[0]);
         if state {
             break;
         }

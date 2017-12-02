@@ -3,6 +3,7 @@ extern crate tcod;
 use self::tcod::console::*;
 use self::tcod::colors::{Color};
 
+#[derive(Debug)]
 pub struct GameElement {
     x: i32,
     y: i32,
