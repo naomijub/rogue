@@ -20,7 +20,10 @@ fn main() {
         root.set_default_foreground(colors::WHITE);
         root.put_char(player_x, player_y, 'P', BackgroundFlag::None);
         root.flush();
-        handle_input(&mut root, &mut player_x, &mut player_y);
+        let state = handle_move(&mut root, &mut player_x, &mut player_y);
+        if state {
+            break;
+        }
     }
 }
 
@@ -33,7 +36,7 @@ fn root() -> Root {
         .init()
 }
 
-fn handle_input(root: &mut Root, player_x: &mut i32, player_y: &mut i32) {
+fn handle_move(root: &mut Root, player_x: &mut i32, player_y: &mut i32) -> bool {
     use tcod::input::Key;
     use tcod::input::KeyCode::*;
 
@@ -45,6 +48,8 @@ fn handle_input(root: &mut Root, player_x: &mut i32, player_y: &mut i32) {
         Key { code: Left, .. } => { *player_x -= 1; root.clear();},
         Key { code: Right, .. } => { *player_x += 1; root.clear();},
 
+        Key { code: Escape, .. } => return true,
         _ => {},
     }
+    false
 }
