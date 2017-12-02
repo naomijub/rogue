@@ -34,7 +34,6 @@ pub fn draw(map: &Vec<Vec<Option<char>>>, root: &mut Root) {
             }
 
             count_x += 1;
-            println!("x: {:?}, y: {:?}", count_x, count_y );
         }
         count_y += 1;
     }
